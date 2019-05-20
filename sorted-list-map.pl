@@ -1,20 +1,20 @@
-concat([], B, B).
-concat([H | T], B, [H | R]) :- concat(T, B, R).
+concat([], Second, Second).
+concat([Head | Tail], Second, [Head | Result]) :- concat(Tail, Second, Result).
 
-map_put([], K, V, [(K, V)]).
-map_put([(K, OV) | T], K, V, [(K, V) | T]).  
-map_put([(CK, CV) | T], K, V, R) :- K < CK, concat([(K, V)], [(CK, CV)], R1), concat(R1, T, R).
-map_put([(CK, CV) | T], K, V, R) :- K > CK, map_put(T, K, V, R1), concat([(CK, CV)], R1, R).   
+map_put([], Key, Value, [(Key, Value)]).
+map_put([(Key, OldValue) | Tail], Key, Value, [(Key, Value) | Tail]).  
+map_put([(CurKey, CurValue) | Tail], Key, Value, Result) :- Key < CurKey, concat([(Key, Value)], [(CurKey, CurValue)], Part), concat(Part, Tail, Result).
+map_put([(CurKey, CurValue) | Tail], Key, Value, Result) :- Key > CurKey, map_put(Tail, Key, Value, Part), concat([(CurKey, CurValue)], Part, Result).   
 
-map_get([(K, V) | T], K, V).
-map_get([(CK, CV) | T], K, V) :- K > CK, map_get(T, K, V).
+map_get([(Key, Value) | Tail], Key, Value).
+map_get([(CurKey, CurValue) | Tail], Key, Value) :- Key > CurKey, map_get(Tail, Key, Value).
 
-map_remove([], K, []).
-map_remove([(K, CV) | T], K, T).
-map_remove([(CK, CV) | T], K, R) :- K < CK, concat([(CK, CV)], T, R).
-map_remove([(CK, CV) | T], K, R) :- K > CK, map_remove(T, K, R1), concat([(CK, CV)], R1, R).
+map_remove([], Key, []).
+map_remove([(Key, CurValue) | Tail], Key, Tail).
+map_remove([(CurKey, CurValue) | Tail], Key, Result) :- Key < CurKey, concat([(CurKey, CurValue)], Tail, Result).
+map_remove([(CurKey, CurValue) | Tail], Key, Result) :- Key > CurKey, map_remove(Tail, Key, Part), concat([(CurKey, CurValue)], Part, Result).
 
-map_replace([], K, V, []).
-map_replace([(K, OV) | T], K, V, [(K, V) | T]).
-map_replace([(CK, CV) | T], K, V, R) :- K < CK, concat([(CK, CV)], T, R).
-map_replace([(CK, CV) | T], K, V, R) :- K > CK, map_replace(T, K, V, R1), concat([(CK, CV)], R1, R).   
+map_replace([], Key, Value, []).
+map_replace([(Key, OldValue) | Tail], Key, Value, [(Key, Value) | Tail]).
+map_replace([(CurKey, CurValue) | Tail], Key, Value, Result) :- Key < CurKey, concat([(CurKey, CurValue)], Tail, Result).
+map_replace([(CurKey, CurValue) | Tail], Key, Value, Result) :- Key > CurKey, map_replace(Tail, Key, Value, Part), concat([(CurKey, CurValue)], Part, Result).   
