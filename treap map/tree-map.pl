@@ -39,3 +39,6 @@ map_put(Treap, Key, Value, Res) :-
 
 map_remove(Treap, Key, Res) :- 
 	split(Treap, Key, (Treap1, Treap2)), split(Treap2, Key + 1, (Treap3, Treap4)), merge(Treap1, Treap4, Res).
+
+map_size(nil, 0).
+map_size(tree((Y, X, Value), L, R), Size) :- map_size(L, SizeL), map_size(R, SizeR), Size is SizeL + SizeR + 1.
