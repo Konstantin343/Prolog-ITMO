@@ -3,4 +3,6 @@
 
 ### 1. Sorted List Map.
 Map based on sorted list.
+### 2. Tree Map
+Map based on treap.
 
